@@ -12,20 +12,21 @@
 class Solution {
 public:
     TreeNode* bstToGst(TreeNode* root) {
-        unsigned int sum = 0;  
-        updateBstNode(*root, sum);
+        int sum = 0;  // Use signed int to handle negative values too
+        convertToGst(root, sum);
         return root;
     }
 
-    void updateBstNode(TreeNode &node, unsigned int& sum ){
-        if(node.right!=nullptr){
-            updateBstNode( *node.right, sum);
-        }
-        sum += node.val;
-        node.val=sum;
-        if(node.left!=nullptr){
-            updateBstNode(*node.left, sum);
-        }
-    }
+private:
+    // Performs reverse in-order traversal (right → node → left)
+    void convertToGst(TreeNode* node, int& sum) {
+        if (!node) return;
 
+        convertToGst(node->right, sum);  // Traverse right subtree
+
+        sum += node->val;                // Accumulate and update value
+        node->val = sum;
+
+        convertToGst(node->left, sum);   // Traverse left subtree
+    }
 };
