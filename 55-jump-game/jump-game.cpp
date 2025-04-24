@@ -15,7 +15,6 @@ public:
                     }
                 }
             }
-            cout << ans[i] << " ";
         }
         return ans[s - 1];
     }
