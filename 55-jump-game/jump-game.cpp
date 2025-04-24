@@ -5,7 +5,7 @@ public:
         vector<bool> ans(s, false);
         ans[0] = true;
         for (size_t i = 0; i < s-1; ++i) {
-            if (nums[i] > s - i && nums[i] == true) {
+            if (nums[i] > s - i && ans[i] == true) {
                 return true;
             }
             else if (ans[i] == true) {
