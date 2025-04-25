@@ -4,7 +4,6 @@ public:
     
     string getDirections(TreeNode* root, int startValue, int destValue) {
         string path;
-        path.reserve(100000);
         getPathToStartDest(root, startValue, destValue, path);
         
         int i = 0;
