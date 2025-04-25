@@ -1,40 +1,43 @@
 class Solution {
 public:
-    string s, t;
-    
     string getDirections(TreeNode* root, int startValue, int destValue) {
+        string pathToStart, pathToDest;
         string path;
-        getPathToStartDest(root, startValue, destValue, path);
-        
+        path.reserve(100000);  // optional optimization
+
+        findPaths(root, startValue, destValue, path, pathToStart, pathToDest);
+
+        // Find divergence point
         int i = 0;
-        while (i < s.size() && i < t.size() && s[i] == t[i]) {
+        while (i < pathToStart.size() && i < pathToDest.size() && pathToStart[i] == pathToDest[i]) {
             ++i;
         }
 
-        string ans(s.size() - i, 'U');  // go up from startValue to LCA
-        ans += t.substr(i);             // go down from LCA to destValue
-
-        return ans;
+        // Go up from startValue to the LCA
+        string result(pathToStart.size() - i, 'U');
+        // Go down from LCA to destValue
+        result += pathToDest.substr(i);
+        return result;
     }
 
-    bool getPathToStartDest(TreeNode* node, int startValue, int destValue, string& path) {
+private:
+    bool findPaths(TreeNode* node, int startValue, int destValue, string& path, string& pathToStart, string& pathToDest) {
         if (!node) return false;
 
         if (node->val == startValue) {
-            s = path;
+            pathToStart = path;
         }
         if (node->val == destValue) {
-            t = path;
+            pathToDest = path;
         }
-
-        if (!s.empty() && !t.empty()) return true;
+        if (!pathToStart.empty() && !pathToDest.empty()) return true;
 
         path.push_back('L');
-        if (getPathToStartDest(node->left, startValue, destValue, path)) return true;
+        if (findPaths(node->left, startValue, destValue, path, pathToStart, pathToDest)) return true;
         path.pop_back();
 
         path.push_back('R');
-        if (getPathToStartDest(node->right, startValue, destValue, path)) return true;
+        if (findPaths(node->right, startValue, destValue, path, pathToStart, pathToDest)) return true;
         path.pop_back();
 
         return false;
